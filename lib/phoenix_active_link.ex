@@ -135,13 +135,15 @@ defmodule PhoenixActiveLink do
   end
 
   # NOTE: root path is an exception, otherwise it would be active all the time
-  defp starts_with_path?(request_path, "/") when request_path != "/", do: false
+  defp starts_with_path?(request_path, "/"), do: request_path == "/"
+
   defp starts_with_path?(request_path, to) do
     # Parse both paths to strip any query parameters
     %{path: request_path} = URI.parse(request_path)
     %{path: to_path} = URI.parse(to)
 
-    String.starts_with?(request_path, String.trim_trailing(to_path, "/"))
+    not (is_nil(request_path) or is_nil(to_path)) and
+      String.starts_with?(request_path, String.trim_trailing(to_path, "/"))
   end
 
   defp module_actions_active?(conn, module_actions) do

@@ -22,8 +22,11 @@ defmodule PhoenixActiveLinkTest do
     assert active_path?(conn(path: "/foo"), to: "/foo/", active: :inclusive)
     assert active_path?(conn(path: "/foo"), to: "/foo?param=bar", active: :inclusive)
     assert active_path?(conn(path: "/foo?param=bar"), to: "/foo", active: :inclusive)
+    assert active_path?(conn(path: "/"), to: "/", active: :inclusive)
     refute active_path?(conn(path: "/foo"), to: "/", active: :inclusive)
     refute active_path?(conn(path: "/"), to: "/foo", active: :inclusive)
+    refute active_path?(conn(path: "//"), to: "/foo", active: :inclusive)
+    assert active_path?(conn(path: "/"), to: "/", active: :inclusive)
   end
 
   test "active_path? when :active is not passed" do
